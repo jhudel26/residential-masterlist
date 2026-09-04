@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="min-h-screen bg-slate-50 font-sans">
+      <body className="min-h-screen bg-slate-50 dark:bg-[#060c18] font-sans transition-colors duration-200">
         <AppProvider>
           <ToastProvider>{children}</ToastProvider>
         </AppProvider>

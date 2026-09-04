@@ -118,9 +118,8 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
         </nav>
       </div>
 
-      {/* Footer Theme & Sign Out */}
-      <div className="p-4 border-t border-slate-800/80 space-y-2">
-        <ThemeToggle className="w-full justify-start text-slate-300 hover:text-white bg-slate-900/60 border-slate-800 hover:bg-slate-800/80" showLabel />
+      {/* Footer Sign Out */}
+      <div className="p-4 border-t border-slate-800/80">
         <button
           onClick={() => logout()}
           className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-400 hover:bg-red-950/30 hover:text-red-300 transition-colors"
