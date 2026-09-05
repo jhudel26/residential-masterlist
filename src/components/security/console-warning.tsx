@@ -1,11 +1,37 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export function ConsoleWarning() {
   const [showWarning, setShowWarning] = useState(false);
+  const hasLogged = useRef(false);
 
   useEffect(() => {
+    // Always log warning to console on mount (like Facebook)
+    if (!hasLogged.current) {
+      hasLogged.current = true;
+    console.log(
+      "%c⚠️ STOP! ⚠️",
+      "color: red; font-size: 40px; font-weight: bold;"
+    );
+    console.log(
+      "%cThis is a browser feature intended for developers.",
+      "color: orange; font-size: 16px;"
+    );
+    console.log(
+      "%cIf someone told you to copy-paste something here to enable a feature or &quot;hack&quot; an account, it&apos;s a scam and will give them access to your account.",
+      "color: red; font-size: 14px;"
+    );
+    console.log(
+      "%cPasting code here can give attackers access to your account and sensitive data.",
+      "color: red; font-size: 14px;"
+    );
+    console.log(
+      "%cFor more information, visit: https://developer.mozilla.org/en-US/docs/Tools/Console",
+      "color: blue; font-size: 12px;"
+    );
+    }
+
     let devtools = { open: false };
     const threshold = 160;
 
