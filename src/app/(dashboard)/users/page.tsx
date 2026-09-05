@@ -23,6 +23,12 @@ export default function UsersManagementPage() {
     );
   }
 
+  // Super admin accounts are only visible to other super admins
+  const isSuperAdmin = currentUser?.role === "super_admin";
+  const visibleProfiles = isSuperAdmin
+    ? allProfiles
+    : allProfiles.filter((p) => p.role !== "super_admin");
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -30,7 +36,7 @@ export default function UsersManagementPage() {
         description="Configure board member roles, staff permissions, and account access status"
       />
 
-      <UserTable profiles={allProfiles} />
+      <UserTable profiles={visibleProfiles} />
     </div>
   );
 }

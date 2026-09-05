@@ -642,7 +642,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
       </div>
 
       {/* Form Bottom Submission Bar */}
-      <div className="flex items-center justify-end gap-3 p-4 rounded-3xl border border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0e192d]/90 shadow-subtle sticky bottom-4 z-20 backdrop-blur-md">
+      <div className="flex items-center justify-end gap-3 p-4 rounded-3xl border border-slate-200 dark:border-[#1e2f4d] bg-white dark:bg-[#0e192d]/90 shadow-subtle mt-2">
         <Button
           type="button"
           variant="outline"
