@@ -11,10 +11,62 @@ export default function AnalyticsPage() {
   const { currentUser } = useAuth();
   const { homeowners, allProfiles, activityLogs } = useApp();
   const [mounted, setMounted] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState<{
+    pageViews: number;
+    uniqueVisitors: number;
+    topRoutes: Array<{ route: string; pageviews: number; visitors: number }>;
+    topCountries: Array<{ country: string; pageviews: number; visitors: number }>;
+    topDevices: Array<{ deviceType: string; pageviews: number; visitors: number }>;
+    topBrowsers: Array<{ browserName: string; pageviews: number; visitors: number }>;
+    loading: boolean;
+    error: string | null;
+  }>({
+    pageViews: 0,
+    uniqueVisitors: 0,
+    topRoutes: [],
+    topCountries: [],
+    topDevices: [],
+    topBrowsers: [],
+    loading: true,
+    error: null,
+  });
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    const fetchAnalytics = async () => {
+      try {
+        const response = await fetch("/api/analytics");
+        if (!response.ok) {
+          throw new Error("Failed to fetch analytics");
+        }
+        const data = await response.json();
+        setAnalyticsData({
+          pageViews: data.pageViews || 0,
+          uniqueVisitors: data.uniqueVisitors || 0,
+          topRoutes: data.topRoutes || [],
+          topCountries: data.topCountries || [],
+          topDevices: data.topDevices || [],
+          topBrowsers: data.topBrowsers || [],
+          loading: false,
+          error: null,
+        });
+      } catch (error) {
+        console.error("Error fetching analytics:", error);
+        setAnalyticsData((prev) => ({
+          ...prev,
+          loading: false,
+          error: "Failed to load analytics data",
+        }));
+      }
+    };
+
+    fetchAnalytics();
+  }, [mounted]);
 
   if (!mounted) return null;
 
@@ -79,7 +131,13 @@ export default function AnalyticsPage() {
             <div>
               <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Page Views</p>
               <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-1">
-                --
+                {analyticsData.loading ? (
+                  <span className="text-slate-400">Loading...</span>
+                ) : analyticsData.error ? (
+                  <span className="text-red-500">Error</span>
+                ) : (
+                  analyticsData.pageViews.toLocaleString()
+                )}
               </p>
             </div>
             <div className="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center">
@@ -93,7 +151,13 @@ export default function AnalyticsPage() {
             <div>
               <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Active Users</p>
               <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mt-1">
-                --
+                {analyticsData.loading ? (
+                  <span className="text-slate-400">Loading...</span>
+                ) : analyticsData.error ? (
+                  <span className="text-red-500">Error</span>
+                ) : (
+                  analyticsData.uniqueVisitors.toLocaleString()
+                )}
               </p>
             </div>
             <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center">
@@ -135,60 +199,93 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="p-6">
           <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">
-            Custom Events Tracked
+            Top Routes
           </h3>
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-              <span className="text-sm text-slate-700 dark:text-slate-300">User Actions</span>
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Logged</span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-              <span className="text-sm text-slate-700 dark:text-slate-300">API Calls</span>
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Logged</span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-              <span className="text-sm text-slate-700 dark:text-slate-300">Page Views</span>
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Logged</span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
-              <span className="text-sm text-slate-700 dark:text-slate-300">Errors</span>
-              <span className="text-xs font-medium text-slate-500 dark:text-slate-400">Logged</span>
-            </div>
+            {analyticsData.loading ? (
+              <p className="text-sm text-slate-500">Loading...</p>
+            ) : analyticsData.topRoutes.length === 0 ? (
+              <p className="text-sm text-slate-500">No data available</p>
+            ) : (
+              analyticsData.topRoutes.map((item, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                  <span className="text-sm text-slate-700 dark:text-slate-300 font-mono">{item.route || "/"}</span>
+                  <div className="text-right">
+                    <span className="text-xs font-medium text-slate-900 dark:text-slate-100">{item.pageviews}</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 ml-2">views</span>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </Card>
 
         <Card className="p-6">
           <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">
-            Performance Metrics
+            Top Countries
           </h3>
-          <div className="space-y-4">
-            <div>
-              <div className="flex items-center justify-between text-sm mb-1">
-                <span className="text-slate-700 dark:text-slate-300">LCP (Largest Contentful Paint)</span>
-                <span className="text-slate-500 dark:text-slate-400">Good</span>
-              </div>
-              <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 rounded-full" style={{ width: "85%" }} />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-between text-sm mb-1">
-                <span className="text-slate-700 dark:text-slate-300">FID (First Input Delay)</span>
-                <span className="text-slate-500 dark:text-slate-400">Good</span>
-              </div>
-              <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 rounded-full" style={{ width: "92%" }} />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-between text-sm mb-1">
-                <span className="text-slate-700 dark:text-slate-300">CLS (Cumulative Layout Shift)</span>
-                <span className="text-slate-500 dark:text-slate-400">Good</span>
-              </div>
-              <div className="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                <div className="h-full bg-emerald-500 rounded-full" style={{ width: "95%" }} />
-              </div>
-            </div>
+          <div className="space-y-3">
+            {analyticsData.loading ? (
+              <p className="text-sm text-slate-500">Loading...</p>
+            ) : analyticsData.topCountries.length === 0 ? (
+              <p className="text-sm text-slate-500">No data available</p>
+            ) : (
+              analyticsData.topCountries.map((item, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                  <span className="text-sm text-slate-700 dark:text-slate-300">{item.country || "Unknown"}</span>
+                  <div className="text-right">
+                    <span className="text-xs font-medium text-slate-900 dark:text-slate-100">{item.visitors}</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 ml-2">visitors</span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">
+            Top Devices
+          </h3>
+          <div className="space-y-3">
+            {analyticsData.loading ? (
+              <p className="text-sm text-slate-500">Loading...</p>
+            ) : analyticsData.topDevices.length === 0 ? (
+              <p className="text-sm text-slate-500">No data available</p>
+            ) : (
+              analyticsData.topDevices.map((item, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                  <span className="text-sm text-slate-700 dark:text-slate-300">{item.deviceType || "Unknown"}</span>
+                  <div className="text-right">
+                    <span className="text-xs font-medium text-slate-900 dark:text-slate-100">{item.visitors}</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 ml-2">visitors</span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <h3 className="font-semibold text-slate-900 dark:text-slate-100 mb-4">
+            Top Browsers
+          </h3>
+          <div className="space-y-3">
+            {analyticsData.loading ? (
+              <p className="text-sm text-slate-500">Loading...</p>
+            ) : analyticsData.topBrowsers.length === 0 ? (
+              <p className="text-sm text-slate-500">No data available</p>
+            ) : (
+              analyticsData.topBrowsers.map((item, index) => (
+                <div key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg">
+                  <span className="text-sm text-slate-700 dark:text-slate-300">{item.browserName || "Unknown"}</span>
+                  <div className="text-right">
+                    <span className="text-xs font-medium text-slate-900 dark:text-slate-100">{item.visitors}</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-400 ml-2">visitors</span>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </Card>
       </div>
