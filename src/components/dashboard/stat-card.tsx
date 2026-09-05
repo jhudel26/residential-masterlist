@@ -30,10 +30,10 @@ export const StatCard = React.memo(function StatCard({
   };
 
   const barVariants = {
-    teal: "bg-gradient-to-r from-teal-600 to-teal-400",
-    emerald: "bg-gradient-to-r from-teal-600 to-teal-400",
+    teal: "bg-gradient-to-r from-slate-600 dark:from-slate-900 to-teal-600 dark:to-teal-700",
+    emerald: "bg-gradient-to-r from-slate-600 dark:from-slate-900 to-teal-600 dark:to-teal-700",
     navy: "bg-gradient-to-r from-slate-600 dark:from-slate-900 to-teal-600 dark:to-teal-700",
-    gold: "bg-gradient-to-r from-teal-600 to-teal-400",
+    gold: "bg-gradient-to-r from-slate-600 dark:from-slate-900 to-teal-600 dark:to-teal-700",
     slate: "bg-gradient-to-r from-slate-600 to-slate-400",
   };
 

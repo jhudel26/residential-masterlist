@@ -57,6 +57,9 @@ export default function DashboardPage() {
   const activePercent = totalHomeowners > 0 ? Math.round((activeHomeowners / totalHomeowners) * 100) : 0;
 
   const totalPets = homeowners.reduce((acc, curr) => acc + (curr.pet_count || 0), 0);
+  const homeownersVsResidentsPercent = totalResidents > 0 
+    ? Math.round((totalHomeowners / totalResidents) * 100) 
+    : 0;
 
   // Time-based greeting
   const hour = new Date().getHours();
@@ -157,15 +160,16 @@ export default function DashboardPage() {
             icon={Building}
             variant="teal"
             badgeText={`${totalHomeowners} Units`}
+            progressPercent={activePercent}
           />
 
           <StatCard
             title="Total Residents"
             value={totalResidents}
-            subtitle={`${totalHouseholdMembers} Household Members`}
+            subtitle={`${totalHomeowners} Houses`}
             icon={Users}
             variant="emerald"
-            progressPercent={activePercent}
+            progressPercent={homeownersVsResidentsPercent}
           />
 
           <StatCard

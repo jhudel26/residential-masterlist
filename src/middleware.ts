@@ -37,7 +37,7 @@ export async function middleware(request: NextRequest) {
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   response.headers.set(
     "Permissions-Policy",
-    "camera=(), microphone=(), geolocation=(), browsing-topics=()"
+    "camera=(), microphone=(), geolocation=(), browsing-topics=(), attribution-reporting=(), unload=()"
   );
 
   // Strict-Transport-Security (HSTS) in production

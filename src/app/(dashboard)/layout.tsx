@@ -8,6 +8,7 @@ import { useApp } from "@/context/app-context";
 import { OfflineBanner } from "@/components/ui/offline-banner";
 import { KeyboardShortcutsModal } from "@/components/layout/keyboard-shortcuts-modal";
 import { VercelAnalytics } from "@/components/analytics/vercel-analytics";
+import { ConsoleWarning } from "@/components/security/console-warning";
 import { Loader2 } from "lucide-react";
 
 export default function DashboardLayout({
@@ -102,6 +103,9 @@ export default function DashboardLayout({
 
       {/* Vercel Analytics */}
       <VercelAnalytics />
+
+      {/* Console Security Warning */}
+      <ConsoleWarning />
     </div>
   );
 }
