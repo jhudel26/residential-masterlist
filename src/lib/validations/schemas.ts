@@ -17,6 +17,7 @@ export const UserPermissionsSchema = z.object({
   can_manage_users: z.boolean().default(false),
   can_grant_permissions: z.boolean().default(false),
   can_view_dashboard_stats: z.boolean().default(true),
+  can_backup_restore: z.boolean().default(false),
 });
 
 export const CreateUserSchema = z.object({

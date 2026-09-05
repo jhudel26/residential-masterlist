@@ -43,14 +43,14 @@ export function HomeownerDetailsModal({
   };
 
   const modalTabs = [
-    { id: "overview", label: "Overview & Property", icon: <Home className="h-3.5 w-3.5" /> },
+    { id: "overview", label: "Overview & Property", icon: <Home className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" /> },
     {
       id: "household",
       label: "Household Members",
-      icon: <Users className="h-3.5 w-3.5" />,
+      icon: <Users className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />,
       badge: homeowner.household_members?.length || 0,
     },
-    { id: "proxy", label: "GA Proxy & Contact", icon: <Shield className="h-3.5 w-3.5" /> },
+    { id: "proxy", label: "GA Proxy & Contact", icon: <Shield className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" /> },
   ];
 
   return (

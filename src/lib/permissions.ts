@@ -44,6 +44,11 @@ export const PERMISSION_DEFINITIONS: Record<
     description: "Adjust individual permission toggles for Admin and User accounts",
     category: "System",
   },
+  can_backup_restore: {
+    label: "Backup & Restore",
+    description: "Export a full database backup or restore data from a backup snapshot",
+    category: "System",
+  },
 };
 
 export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
@@ -56,6 +61,7 @@ export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
     can_manage_users: true,
     can_grant_permissions: true,
     can_view_dashboard_stats: true,
+    can_backup_restore: true,
   },
   admin: {
     can_create_homeowner: true,
@@ -66,6 +72,7 @@ export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
     can_manage_users: false,
     can_grant_permissions: false,
     can_view_dashboard_stats: true,
+    can_backup_restore: false,
   },
   user: {
     can_create_homeowner: false,
@@ -76,6 +83,7 @@ export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
     can_manage_users: false,
     can_grant_permissions: false,
     can_view_dashboard_stats: true,
+    can_backup_restore: false,
   },
 };
 

@@ -58,28 +58,28 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   ];
 
   const sidebarContent = (
-    <div className="flex h-full flex-col justify-between bg-[#07162c] text-slate-200 border-r border-slate-800">
+    <div className="flex h-full flex-col justify-between bg-white dark:bg-[#07162c] text-slate-700 dark:text-slate-200 border-r border-slate-200 dark:border-slate-800 transition-colors duration-200">
       {/* Brand Header */}
       <div>
-        <div className="flex items-center gap-3.5 px-6 py-6 border-b border-slate-800/80 bg-[#040d1c]">
-          <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-600 via-teal-800 to-navy-950 text-white shadow-md border border-teal-500/30 shrink-0">
+        <div className="flex items-center gap-3.5 px-6 py-6 border-b border-slate-200 dark:border-slate-800/80 bg-slate-50 dark:bg-[#040d1c]">
+          <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-teal-600 via-teal-800 to-slate-900 text-white shadow-md border border-teal-500/30 shrink-0">
             <Home className="h-5 w-5 text-teal-300" />
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-teal-400 flex items-center gap-1">
-              <Sparkles className="h-2.5 w-2.5 text-teal-400" />
+            <span className="text-[10px] font-bold uppercase tracking-widest text-teal-600 dark:text-teal-400 flex items-center gap-1">
+              <Sparkles className="h-2.5 w-2.5 text-teal-500 dark:text-teal-400" />
               HOA Masterlist
             </span>
-            <span className="text-sm font-extrabold text-white leading-tight font-sans truncate">
+            <span className="text-sm font-extrabold text-slate-900 dark:text-white leading-tight font-sans truncate">
               St. Joseph Village 6
             </span>
-            <span className="text-[11px] font-semibold text-slate-400">Phase 4 Board Portal</span>
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Phase 4 Board Portal</span>
           </div>
         </div>
 
         {/* Navigation Links */}
         <nav className="px-3.5 py-3 space-y-1.5">
-          <p className="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+          <p className="px-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
             System Modules
           </p>
           {navItems
@@ -99,19 +99,19 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
                   }}
                   className={`group flex items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all duration-200 ${
                     isActive
-                      ? "bg-gradient-to-r from-teal-700 to-teal-800 text-white shadow-sm border border-teal-500/40 translate-x-0.5"
-                      : "text-slate-300 hover:bg-slate-800/60 hover:text-white"
+                      ? "bg-gradient-to-r from-teal-600 to-teal-700 dark:from-teal-700 dark:to-teal-800 text-white shadow-sm border border-teal-500/40 translate-x-0.5"
+                      : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <Icon
                       className={`h-4 w-4 transition-colors ${
-                        isActive ? "text-teal-300" : "text-slate-400 group-hover:text-slate-200"
+                        isActive ? "text-teal-100" : "text-slate-400 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200"
                       }`}
                     />
                     <span>{item.name}</span>
                   </div>
-                  {isActive && <ChevronRight className="h-3.5 w-3.5 text-teal-300" />}
+                  {isActive && <ChevronRight className="h-3.5 w-3.5 text-teal-200" />}
                 </Link>
               );
             })}
@@ -119,12 +119,12 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       </div>
 
       {/* Footer Sign Out */}
-      <div className="p-4 border-t border-slate-800/80">
+      <div className="p-4 border-t border-slate-200 dark:border-slate-800/80">
         <button
           onClick={() => logout()}
-          className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-400 hover:bg-red-950/30 hover:text-red-300 transition-colors"
+          className="flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-300 transition-colors"
         >
-          <LogOut className="h-4 w-4 text-slate-500 group-hover:text-red-300" />
+          <LogOut className="h-4 w-4 text-slate-400 dark:text-slate-500" />
           <span>Sign Out of Portal</span>
         </button>
       </div>
@@ -134,16 +134,16 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       {/* Mobile Top Bar */}
-      <div className="lg:hidden flex items-center justify-between bg-[#07162c] px-4 py-3.5 border-b border-slate-800 sticky top-0 z-40">
+      <div className="lg:hidden flex items-center justify-between bg-white dark:bg-[#07162c] px-4 py-3.5 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-40 transition-colors duration-200">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-teal-800 text-teal-300 shadow-sm">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-teal-700 text-teal-300 shadow-sm">
             <Home className="h-4 w-4" />
           </div>
           <div>
-            <span className="font-extrabold text-xs text-white uppercase tracking-wider block">
+            <span className="font-extrabold text-xs text-slate-900 dark:text-white uppercase tracking-wider block">
               St. Joseph Village 6
             </span>
-            <span className="text-[10px] text-teal-400 font-medium">Phase 4 Masterlist</span>
+            <span className="text-[10px] text-teal-600 dark:text-teal-400 font-medium">Phase 4 Masterlist</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -152,7 +152,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={mobileOpen}
-            className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white shadow-xs"
+            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white shadow-xs transition-colors"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>

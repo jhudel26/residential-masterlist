@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { Profile, UserPermissions, UserRole } from "@/types/database";
 import { useApp } from "@/context/app-context";
-import { hasPermission } from "@/lib/permissions";
+import { hasPermission, PERMISSION_DEFINITIONS } from "@/lib/permissions";
 import { RoleBadge, StatusBadge } from "@/components/ui/badge";
 import { ManagePermissionsModal } from "./manage-permissions-modal";
 import { CreateUserModal } from "./create-user-modal";
@@ -110,7 +110,7 @@ export function UserTable({ profiles }: UserTableProps) {
         </div>
 
         <div className="p-4 rounded-2xl border border-slate-200/80 dark:border-[#1e2f4d] bg-white dark:bg-[#0e192d] shadow-subtle flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-slate-900 dark:bg-[#07162c] text-teal-300 border border-slate-700 dark:border-teal-500/30">
+          <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-[#07162c] text-slate-700 dark:text-teal-300 border border-slate-300 dark:border-teal-500/30">
             <Shield className="h-5 w-5" />
           </div>
           <div>
@@ -220,7 +220,7 @@ export function UserTable({ profiles }: UserTableProps) {
                       <td className="py-4 px-4 text-center">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                           <ShieldCheck className="h-3.5 w-3.5 text-teal-700 dark:text-teal-400" />
-                          {isSuperAdmin ? "Full Access (All 8)" : `${activeCount} / 8 Granted`}
+                          {isSuperAdmin ? `Full Access (All ${Object.keys(PERMISSION_DEFINITIONS).length})` : `${activeCount} / ${Object.keys(PERMISSION_DEFINITIONS).length} Granted`}
                         </span>
                       </td>
 

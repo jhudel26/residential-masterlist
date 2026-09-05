@@ -32,6 +32,7 @@ export function ManagePermissionsModal({
       can_manage_users: false,
       can_grant_permissions: false,
       can_view_dashboard_stats: true,
+      can_backup_restore: false,
     }
   );
   const [saving, setSaving] = useState(false);
@@ -63,6 +64,7 @@ export function ManagePermissionsModal({
       can_manage_users: true,
       can_grant_permissions: true,
       can_view_dashboard_stats: true,
+      can_backup_restore: true,
     });
   };
 

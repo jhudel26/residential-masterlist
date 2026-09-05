@@ -18,7 +18,7 @@ export async function exportHomeownersToExcel(
   });
 
   // Title Row
-  sheet1.mergeCells("A1:K1");
+  sheet1.mergeCells("A1:L1");
   const titleCell = sheet1.getCell("A1");
   titleCell.value = "ST. JOSEPH VILLAGE 6 PHASE 4 — HOMEOWNERS ASSOCIATION";
   titleCell.font = { name: "Arial", size: 14, bold: true, color: { argb: "FFFFFFFF" } };
@@ -31,7 +31,7 @@ export async function exportHomeownersToExcel(
   sheet1.getRow(1).height = 32;
 
   // Subtitle Row
-  sheet1.mergeCells("A2:K2");
+  sheet1.mergeCells("A2:L2");
   const subCell = sheet1.getCell("A2");
   subCell.value = `Official Homeowners Masterlist Registry (Exported: ${new Date().toLocaleDateString(
     "en-US",

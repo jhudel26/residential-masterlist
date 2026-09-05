@@ -2,50 +2,29 @@
 
 import React, { useState, useEffect } from "react";
 import { useApp } from "@/context/app-context";
-import { hasPermission } from "@/lib/permissions";
-import { exportHomeownersToExcel } from "@/lib/excel-export";
-import { Button } from "@/components/ui/button";
-import { FileSpreadsheet, Shield, Calendar, Clock } from "lucide-react";
-import { useToast } from "@/components/ui/toast";
+import { Shield, Calendar } from "lucide-react";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
-import { getErrorMessage } from "@/lib/error-utils";
-
 export function Navbar() {
-  const { currentUser, homeowners } = useApp();
-  const { success, error: toastError } = useToast();
-  const canExport = hasPermission(currentUser, "can_export_excel");
+  const { currentUser } = useApp();
 
-  // Real-time date display
   const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      setCurrentDate(
-        now.toLocaleDateString("en-US", {
-          weekday: "short",
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        })
-      );
-    };
-    updateTime();
+    const now = new Date();
+    setCurrentDate(
+      now.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    );
   }, []);
-
-  const handleExport = async () => {
-    try {
-      await exportHomeownersToExcel(homeowners);
-      success("Export Complete", "Exported full homeowners registry to Excel.");
-    } catch (err: unknown) {
-      toastError("Export Failed", getErrorMessage(err));
-    }
-  };
 
   return (
     <header className="hidden lg:flex items-center justify-between h-16 px-8 border-b border-slate-200/80 dark:border-slate-800 bg-white/90 dark:bg-[#07162c]/90 backdrop-blur-md sticky top-0 z-20 shadow-xs transition-colors duration-200">
-      {/* Left Breadcrumb & Portal Identifier */}
+      {/* Left: Date & Portal Badge */}
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
           <Calendar className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
@@ -57,24 +36,10 @@ export function Navbar() {
         </span>
       </div>
 
-      {/* Right Actions & Active Session Info */}
+      {/* Right: Theme toggle + User info */}
       <div className="flex items-center gap-3.5">
-        {/* Light / Dark Mode Toggle */}
         <ThemeToggle />
 
-        {canExport && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleExport}
-            className="text-teal-800 dark:text-teal-300 border-teal-300/80 dark:border-teal-700/60 hover:bg-teal-50 dark:hover:bg-teal-950/40 h-9 px-3 text-xs gap-1.5 font-bold shadow-xs"
-          >
-            <FileSpreadsheet className="h-4 w-4 text-teal-600 dark:text-teal-400" />
-            <span>Export Registry (.xlsx)</span>
-          </Button>
-        )}
-
-        {/* User Identity Pill */}
         <div className="flex items-center gap-2.5 pl-3 border-l border-slate-200 dark:border-slate-800">
           <div className="h-8 w-8 rounded-xl bg-[#07162c] dark:bg-[#0c2340] text-teal-300 font-bold flex items-center justify-center text-xs shadow-xs border border-teal-500/20">
             {currentUser?.full_name?.charAt(0) || "U"}

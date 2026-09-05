@@ -536,7 +536,7 @@ export function HomeownerForm({ initialData, onSubmit, isEditing = false }: Home
       <div className="rounded-3xl border border-slate-200/80 dark:border-[#1e2f4d] bg-white dark:bg-[#0e192d] p-6 sm:p-8 shadow-subtle space-y-6">
         <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-[#1e2f4d]">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#07162c] text-teal-300 border border-teal-500/20 shadow-xs">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 dark:bg-[#07162c] text-slate-600 dark:text-teal-300 border border-slate-200 dark:border-teal-500/20 shadow-xs">
               <Shield className="h-5 w-5" />
             </div>
             <div>

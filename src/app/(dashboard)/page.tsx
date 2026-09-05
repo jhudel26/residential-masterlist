@@ -8,7 +8,6 @@ import { hasPermission } from "@/lib/permissions";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { ChartSkeleton } from "@/components/ui/card-skeleton";
 import { RecentActivity } from "@/components/dashboard/recent-activity";
-import { Button } from "@/components/ui/button";
 import {
   Users,
   Home,
@@ -39,6 +38,7 @@ export default function DashboardPage() {
   const canViewStats = hasPermission(currentUser, "can_view_dashboard_stats");
   const canCreateHomeowner = hasPermission(currentUser, "can_create_homeowner");
   const canExport = hasPermission(currentUser, "can_export_excel");
+  const canBackupRestore = hasPermission(currentUser, "can_backup_restore");
 
   // Metrics calculations
   const totalHomeowners = homeowners.length;
@@ -92,7 +92,7 @@ export default function DashboardPage() {
       {/* Left: Main Dashboard Content */}
       <div className="flex-1 min-w-0 overflow-x-hidden p-4 sm:p-6 lg:p-8 space-y-8">
         {/* Executive Welcome Hero Banner */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#040d1c] via-[#07162c] to-[#0c2340] text-white p-7 sm:p-9 shadow-glass border border-white/10">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0f3460] via-[#1a4d7a] to-[#1e5c96] dark:from-[#040d1c] dark:via-[#07162c] dark:to-[#0c2340] text-white p-7 sm:p-9 shadow-glass border border-white/10 transition-colors duration-300">
           <div className="absolute -right-16 -top-16 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute right-1/3 -bottom-16 w-64 h-64 bg-teal-400/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -105,43 +105,43 @@ export default function DashboardPage() {
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-sans">
                 {timeGreeting}, {currentUser?.full_name?.split(" ")[0] || "Officer"}
               </h1>
-              <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
+              <p className="text-xs sm:text-sm text-white/75 max-w-xl leading-relaxed">
                 Phase 4 Homeowners Masterlist is currently tracking <span className="font-bold text-white">{totalHomeowners} residential properties</span> and <span className="font-bold text-white">{totalResidents} total occupants</span>.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsBackupOpen(true)}
-                className="bg-white/10 hover:bg-white/20 text-white border-white/20 text-xs font-semibold backdrop-blur-md h-10 px-3.5"
-              >
-                <Database className="h-4 w-4 mr-2 text-teal-300" />
-                <span>Backup / Restore</span>
-              </Button>
+              {canBackupRestore && (
+                <button
+                  type="button"
+                  onClick={() => setIsBackupOpen(true)}
+                  className="inline-flex items-center gap-2 h-10 px-3.5 rounded-lg bg-white/20 hover:bg-white/30 active:scale-[0.98] text-white border border-white/30 text-xs font-semibold backdrop-blur-md transition-all shadow-sm"
+                >
+                  <Database className="h-4 w-4 text-teal-300" />
+                  <span>Backup / Restore</span>
+                </button>
+              )}
 
               {canExport && (
-                <Button
-                  variant="outline"
-                  size="sm"
+                <button
+                  type="button"
                   onClick={handleExport}
-                  className="bg-white/10 hover:bg-white/20 text-white border-white/20 text-xs font-semibold backdrop-blur-md h-10 px-4"
+                  className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-white/20 hover:bg-white/30 active:scale-[0.98] text-white border border-white/30 text-xs font-semibold backdrop-blur-md transition-all shadow-sm"
                 >
-                  <FileSpreadsheet className="h-4 w-4 mr-2 text-teal-300" />
+                  <FileSpreadsheet className="h-4 w-4 text-teal-300" />
                   <span>Export Masterlist</span>
-                </Button>
+                </button>
               )}
 
               {canCreateHomeowner && (
                 <Link href="/homeowners/new">
-                  <Button
-                    size="sm"
-                    className="bg-teal-600 hover:bg-teal-500 text-white border border-teal-400/30 shadow-lg shadow-teal-950/40 font-bold h-10 px-4 gap-2"
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-teal-500 hover:bg-teal-400 active:scale-[0.98] text-white border border-teal-300/40 shadow-lg shadow-teal-950/40 text-xs font-bold transition-all"
                   >
                     <UserPlus className="h-4 w-4" />
                     <span>Register Homeowner</span>
-                  </Button>
+                  </button>
                 </Link>
               )}
             </div>

@@ -24,7 +24,7 @@ export const StatCard = React.memo(function StatCard({
   const iconVariants = {
     teal: "bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border-teal-200/80 dark:border-teal-800/60 shadow-sm",
     emerald: "bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border-teal-200/80 dark:border-teal-800/60 shadow-sm",
-    navy: "bg-slate-900 dark:bg-[#07162c] text-teal-300 border-slate-700 dark:border-teal-900/40 shadow-sm",
+    navy: "bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 border-teal-200/80 dark:border-teal-800/60 shadow-sm",
     gold: "bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border-teal-200/80 dark:border-teal-800/60 shadow-sm",
     slate: "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-slate-700 shadow-sm",
   };
@@ -32,7 +32,7 @@ export const StatCard = React.memo(function StatCard({
   const barVariants = {
     teal: "bg-gradient-to-r from-teal-600 to-teal-400",
     emerald: "bg-gradient-to-r from-teal-600 to-teal-400",
-    navy: "bg-gradient-to-r from-slate-900 to-teal-700",
+    navy: "bg-gradient-to-r from-slate-600 dark:from-slate-900 to-teal-600 dark:to-teal-700",
     gold: "bg-gradient-to-r from-teal-600 to-teal-400",
     slate: "bg-gradient-to-r from-slate-600 to-slate-400",
   };
