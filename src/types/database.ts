@@ -13,6 +13,7 @@ export interface UserPermissions {
   can_grant_permissions: boolean;
   can_view_dashboard_stats: boolean;
   can_backup_restore: boolean;
+  can_view_analytics: boolean;
 }
 
 export interface Profile {

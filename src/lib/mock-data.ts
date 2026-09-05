@@ -18,6 +18,7 @@ export const MOCK_PROFILES: Profile[] = [
       can_grant_permissions: true,
       can_view_dashboard_stats: true,
       can_backup_restore: true,
+      can_view_analytics: true,
     },
   },
   {
@@ -37,6 +38,7 @@ export const MOCK_PROFILES: Profile[] = [
       can_grant_permissions: false,
       can_view_dashboard_stats: true,
       can_backup_restore: false,
+      can_view_analytics: false,
     },
   },
   {
@@ -56,6 +58,7 @@ export const MOCK_PROFILES: Profile[] = [
       can_grant_permissions: false,
       can_view_dashboard_stats: true,
       can_backup_restore: false,
+      can_view_analytics: false,
     },
   },
   {
@@ -75,6 +78,7 @@ export const MOCK_PROFILES: Profile[] = [
       can_grant_permissions: false,
       can_view_dashboard_stats: false,
       can_backup_restore: false,
+      can_view_analytics: false,
     },
   },
 ];

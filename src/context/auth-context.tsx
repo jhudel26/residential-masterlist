@@ -7,6 +7,7 @@ import { isSupabaseConfigured, createClient } from "@/lib/supabase/client";
 import { DEFAULT_PERMISSIONS_BY_ROLE } from "@/lib/permissions";
 import { getErrorMessage } from "@/lib/error-utils";
 import { logger } from "@/lib/logger";
+import { analytics } from "@/lib/monitoring/analytics";
 
 interface AuthContextType {
   currentUser: Profile | null;
@@ -174,6 +175,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       window.location.href = "/login";
     }
   }, [isSupabaseActive]);
+
+  // Update analytics permission when user changes
+  useEffect(() => {
+    if (currentUser) {
+      analytics.setPermission(currentUser.permissions?.can_view_analytics || false);
+    } else {
+      analytics.setPermission(false);
+    }
+  }, [currentUser]);
 
   const updateUserPermissions = useCallback(
     async (userId: string, permissions: UserPermissions) => {

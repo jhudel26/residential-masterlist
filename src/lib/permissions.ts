@@ -49,6 +49,11 @@ export const PERMISSION_DEFINITIONS: Record<
     description: "Export a full database backup or restore data from a backup snapshot",
     category: "System",
   },
+  can_view_analytics: {
+    label: "View Analytics",
+    description: "Access application analytics, performance metrics, and usage data",
+    category: "System",
+  },
 };
 
 export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
@@ -62,6 +67,7 @@ export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
     can_grant_permissions: true,
     can_view_dashboard_stats: true,
     can_backup_restore: true,
+    can_view_analytics: true,
   },
   admin: {
     can_create_homeowner: true,
@@ -73,6 +79,7 @@ export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
     can_grant_permissions: false,
     can_view_dashboard_stats: true,
     can_backup_restore: false,
+    can_view_analytics: false,
   },
   user: {
     can_create_homeowner: false,
@@ -84,6 +91,7 @@ export const DEFAULT_PERMISSIONS_BY_ROLE: Record<UserRole, UserPermissions> = {
     can_grant_permissions: false,
     can_view_dashboard_stats: true,
     can_backup_restore: false,
+    can_view_analytics: false,
   },
 };
 

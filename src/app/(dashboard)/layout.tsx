@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { useApp } from "@/context/app-context";
 import { OfflineBanner } from "@/components/ui/offline-banner";
 import { KeyboardShortcutsModal } from "@/components/layout/keyboard-shortcuts-modal";
+import { VercelAnalytics } from "@/components/analytics/vercel-analytics";
 import { Loader2 } from "lucide-react";
 
 export default function DashboardLayout({
@@ -98,6 +99,9 @@ export default function DashboardLayout({
 
       {/* Global Accessible Keyboard Shortcuts Helper */}
       <KeyboardShortcutsModal />
+
+      {/* Vercel Analytics */}
+      <VercelAnalytics />
     </div>
   );
 }

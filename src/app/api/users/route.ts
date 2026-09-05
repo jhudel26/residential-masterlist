@@ -5,6 +5,7 @@ import { CreateUserSchema } from "@/lib/validations/schemas";
 import { getErrorMessage } from "@/lib/error-utils";
 import { rateLimit, getClientIp } from "@/lib/rate-limit";
 import { logger } from "@/lib/logger";
+import { applySecurityHeaders, applyCorsHeaders } from "@/lib/security/api-security";
 
 export const dynamic = "force-dynamic";
 
@@ -21,10 +22,13 @@ export async function POST(request: NextRequest) {
 
   if (!limiter.allowed) {
     headers.set("Retry-After", String(limiter.retryAfterSeconds || 60));
-    return NextResponse.json(
+    const response = NextResponse.json(
       { error: "Too many requests. Please try again later." },
       { status: 429, headers }
     );
+    applySecurityHeaders(response);
+    applyCorsHeaders(response, request);
+    return response;
   }
 
   try {
@@ -34,7 +38,10 @@ export async function POST(request: NextRequest) {
     const validationResult = CreateUserSchema.safeParse(rawBody);
     if (!validationResult.success) {
       const errorMsg = getErrorMessage(validationResult.error);
-      return NextResponse.json({ error: errorMsg }, { status: 400, headers });
+      const response = NextResponse.json({ error: errorMsg }, { status: 400, headers });
+      applySecurityHeaders(response);
+      applyCorsHeaders(response, request);
+      return response;
     }
 
     const { full_name, email, password, role, permissions } = validationResult.data;
@@ -42,10 +49,13 @@ export async function POST(request: NextRequest) {
     const adminClient = createAdminClient();
     if (!adminClient) {
       logger.error("Supabase admin service role not configured");
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: "Supabase service role is not configured on the server." },
         { status: 500, headers }
       );
+      applySecurityHeaders(response);
+      applyCorsHeaders(response, request);
+      return response;
     }
 
     const userPermissions = permissions || DEFAULT_PERMISSIONS_BY_ROLE[role || "user"];
@@ -63,7 +73,10 @@ export async function POST(request: NextRequest) {
 
     if (authError) {
       logger.warn("Supabase Auth user creation error", { email, message: authError.message });
-      return NextResponse.json({ error: authError.message }, { status: 400, headers });
+      const response = NextResponse.json({ error: authError.message }, { status: 400, headers });
+      applySecurityHeaders(response);
+      applyCorsHeaders(response, request);
+      return response;
     }
 
     const userId = authData.user.id;
@@ -84,17 +97,26 @@ export async function POST(request: NextRequest) {
 
     if (profError) {
       logger.error("Profile sync failed after auth user creation", { userId, error: profError.message });
-      return NextResponse.json(
+      const response = NextResponse.json(
         { error: `User created in Auth, but profile sync failed: ${profError.message}` },
         { status: 500, headers }
       );
+      applySecurityHeaders(response);
+      applyCorsHeaders(response, request);
+      return response;
     }
 
     logger.info("Successfully created user account", { userId, email, role });
-    return NextResponse.json({ success: true, profile }, { status: 201, headers });
+    const response = NextResponse.json({ success: true, profile }, { status: 201, headers });
+    applySecurityHeaders(response);
+    applyCorsHeaders(response, request);
+    return response;
   } catch (err: unknown) {
     const errorMsg = getErrorMessage(err);
     logger.error("Unexpected error in /api/users route", {}, err);
-    return NextResponse.json({ error: errorMsg }, { status: 500, headers });
+    const response = NextResponse.json({ error: errorMsg }, { status: 500, headers });
+    applySecurityHeaders(response);
+    applyCorsHeaders(response, request);
+    return response;
   }
 }

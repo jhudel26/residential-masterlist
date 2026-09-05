@@ -14,6 +14,7 @@ import {
   Menu,
   X,
   Sparkles,
+  BarChart3,
 } from "lucide-react";
 import { useApp } from "@/context/app-context";
 import { hasPermission } from "@/lib/permissions";
@@ -29,6 +30,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const canViewHomeowners = hasPermission(currentUser, "can_view_homeowner");
   const canCreateHomeowner = hasPermission(currentUser, "can_create_homeowner");
   const canManageUsers = hasPermission(currentUser, "can_manage_users");
+  const canViewAnalytics = hasPermission(currentUser, "can_view_analytics");
 
   const navItems = [
     {
@@ -48,6 +50,12 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
       href: "/homeowners/new",
       icon: UserPlus,
       show: canCreateHomeowner,
+    },
+    {
+      name: "Analytics",
+      href: "/analytics",
+      icon: BarChart3,
+      show: canViewAnalytics,
     },
     {
       name: "Board & Permissions",

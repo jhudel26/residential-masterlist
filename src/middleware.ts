@@ -48,14 +48,14 @@ export async function middleware(request: NextRequest) {
     );
   }
 
-  // Content-Security-Policy (CSP) allowing Next.js runtime, inline styles (Tailwind), Supabase, and fonts
+  // Content-Security-Policy (CSP) allowing Next.js runtime, inline styles (Tailwind), Supabase, Vercel Analytics, and fonts
   const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline';
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com;
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: https://*.supabase.co;
     font-src 'self' data:;
-    connect-src 'self' https://*.supabase.co wss://*.supabase.co;
+    connect-src 'self' https://*.supabase.co wss://*.supabase.co https://va.vercel-scripts.com;
     frame-ancestors 'none';
     form-action 'self';
     base-uri 'self';
