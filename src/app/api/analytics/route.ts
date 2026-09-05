@@ -13,27 +13,27 @@ export async function GET(request: NextRequest) {
       projectId: projectId?.substring(0, 10) + "...",
     });
 
-    if (!vercelToken || !projectId) {
-      console.error("Missing credentials:", { hasToken: !!vercelToken, hasProjectId: !!projectId });
+    if (!vercelToken) {
+      console.error("Missing credentials:", { hasToken: !!vercelToken });
       return NextResponse.json(
         { error: "Missing Vercel Analytics credentials" },
         { status: 500 }
       );
     }
 
-    // Get date range (last 30 days - hobby plan limit)
+    // Get date range (last 7 days - user's data timeframe)
     const until = new Date().toISOString();
-    const since = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
     const commonParams = new URLSearchParams({
-      projectId,
       since,
       until,
       limit: "10",
     });
 
-    if (teamId) {
-      commonParams.append("teamId", teamId);
+    // Use only projectId - project-scoped token should handle team automatically
+    if (projectId) {
+      commonParams.append("projectId", projectId);
     }
 
     // Fetch page views and visitors count
