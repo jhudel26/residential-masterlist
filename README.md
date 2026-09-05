@@ -11,7 +11,7 @@
   - **Super Admin (HOA President)**: Unrestricted master control, ability to create Admin and User accounts, adjust granular permissions, and archive records.
   - **Admin (Vice President & Board Members)**: Permission-governed operations (can act like Super Admin if granted, except creating other Super Admins).
   - **User (Staff & Volunteers)**: Strict task-based access (e.g. view only, add homeowner without delete privileges).
-  - **8 Granular Permissions**: `can_create_homeowner`, `can_edit_homeowner`, `can_delete_homeowner`, `can_view_homeowner`, `can_export_excel`, `can_manage_users`, `can_grant_permissions`, `can_view_dashboard_stats`.
+  - **9 Granular Permissions**: `can_create_homeowner`, `can_edit_homeowner`, `can_delete_homeowner`, `can_view_homeowner`, `can_export_excel`, `can_manage_users`, `can_grant_permissions`, `can_view_dashboard_stats`, `can_view_analytics`.
 - **Database & Row Level Security (RLS)**:
   - Supabase PostgreSQL with RLS policies enforced against `profiles.role` and `profiles.permissions`.
   - Auto-computed age via Postgres trigger & instant reactive frontend calculation from birthdate.
@@ -27,15 +27,34 @@
 - **Zero-Friction Sandbox & Live Supabase**:
   - Works out of the box in Sandbox Demo mode with instant persona switcher (`President`, `Vice Pres.`, `Secretary`).
   - Seamlessly connects to real Supabase with Row Level Security once credentials are added to `.env.local`.
+- **Analytics & Monitoring**:
+  - Vercel Analytics integration for page views and web vitals tracking
+  - Custom analytics client with permission-based event tracking
+  - Performance monitoring utilities for API operations
+  - Analytics dashboard with database metrics overview
+- **Progressive Web App (PWA)**:
+  - Service worker with advanced caching strategies (cache-first, network-first, stale-while-revalidate)
+  - Offline support with cached data viewing
+  - Offline banner notification system
+  - Automatic cache management and cleanup
+- **Enhanced Security**:
+  - API security middleware with rate limiting (20 req/min per IP)
+  - CORS validation and security headers
+  - CSRF protection for state-mutating requests
+  - Content Security Policy (CSP) with Vercel Analytics support
+  - HSTS in production
+  - Supabase security fixes (search_path, SECURITY DEFINER function execution)
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS
+- **Frontend**: Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS
 - **Icons & UI**: `lucide-react`, customized accessible dialogs, switches, and toasts
 - **Database / Auth / Security**: Supabase PostgreSQL, Supabase Auth (`@supabase/ssr`, `@supabase/supabase-js`), RLS
 - **Reporting & Charts**: `exceljs` (multi-sheet workbook generator), `recharts` (demographics)
+- **Analytics**: `@vercel/analytics` (page views and web vitals)
+- **Validation**: `zod` (schema validation)
 
 ---
 
@@ -83,7 +102,10 @@ Use the quick-login buttons on the login page:
    - Creates the tables: `profiles`, `homeowners`, `household_members`, and `activity_logs`.
    - Creates triggers for auto-computing age from birthdate and auto-creating user profiles.
    - Enables Row Level Security (RLS) with strict policies.
-4. (Optional) Run [`supabase/seed.sql`](./supabase/seed.sql) in the SQL Editor to populate initial sample properties and members.
+4. Run [`supabase/migrations/02_fix_security_linter_issues.sql`](./supabase/migrations/02_fix_security_linter_issues.sql) to apply security fixes:
+   - Fixes `search_path` on database functions
+   - Revokes unauthorized EXECUTE permissions on SECURITY DEFINER functions
+5. (Optional) Run [`supabase/seed.sql`](./supabase/seed.sql) in the SQL Editor to populate initial sample properties and members.
 
 ### Step 3: Setup Initial Super Admin (President) Account
 1. In the Supabase Dashboard, navigate to **Authentication > Users** and click **Add User > Create User**.
@@ -131,36 +153,55 @@ NEXT_PUBLIC_COMMUNITY_NAME="St. Joseph Village 6 Phase 4 HOA"
 AlpalistHOA/
 ├── supabase/
 │   ├── migrations/
-│   │   └── 01_schema_and_rls.sql   # Postgres DDL, Triggers & RLS Policies
+│   │   ├── 01_schema_and_rls.sql     # Postgres DDL, Triggers & RLS Policies
+│   │   └── 02_fix_security_linter_issues.sql  # Security fixes for search_path & SECURITY DEFINER
 │   └── seed.sql                     # St. Joseph Village 6 Phase 4 seed data
+├── public/
+│   ├── sw.js                        # Service worker for PWA offline support
+│   └── manifest.json                # PWA manifest configuration
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/
 │   │   │   └── login/               # Portal sign in & reset flow
 │   │   ├── (dashboard)/
 │   │   │   ├── page.tsx             # Executive Overview & Charts
+│   │   │   ├── analytics/           # Analytics dashboard with Vercel metrics
 │   │   │   ├── homeowners/
 │   │   │   │   ├── page.tsx         # Masterlist data table
 │   │   │   │   ├── new/             # Multi-section Add Homeowner form
 │   │   │   │   └── [id]/edit/       # Edit Homeowner & Household members
 │   │   │   ├── users/               # Super Admin User & Permissions console
 │   │   │   └── activity/            # Board Audit trail
+│   │   ├── api/
+│   │   │   └── users/               # User creation API with security middleware
 │   │   ├── globals.css
 │   │   └── layout.tsx
 │   ├── components/
+│   │   ├── analytics/               # Vercel Analytics wrapper component
 │   │   ├── dashboard/               # Metric cards, Recharts demographics, activity
 │   │   ├── homeowners/              # Table, dynamic form, details modal, archive dialog
 │   │   ├── users/                   # Accounts table, permissions modal, create user
-│   │   ├── layout/                  # Sidebar, Navbar, PageHeader
-│   │   └── ui/                      # Button, Input, Select, Badge, Switch, Modal, Toast
+│   │   ├── layout/                  # Sidebar, Navbar, PageHeader, Keyboard shortcuts
+│   │   └── ui/                      # Button, Input, Select, Badge, Switch, Modal, Toast, Offline banner
 │   ├── context/
-│   │   └── app-context.tsx          # Real-time state store & Supabase synchronization
+│   │   ├── app-context.tsx          # Real-time state store & Supabase synchronization
+│   │   ├── auth-context.tsx         # Authentication state & user management
+│   │   ├── data-context.tsx         # Data fetching & caching
+│   │   └── theme-context.tsx        # Dark mode theme management
 │   ├── lib/
+│   │   ├── monitoring/              # Analytics client & performance monitoring
+│   │   ├── security/                # API security middleware (rate limiting, CORS, headers)
+│   │   ├── supabase/                # SSR client, server client, admin client, middleware
+│   │   ├── validations/             # Zod schemas for data validation
 │   │   ├── excel-export.ts          # Multi-sheet ExcelJS workbook exporter
-│   │   ├── permissions.ts           # RBAC rules & 8 permission definitions
-│   │   ├── utils.ts                 # Real-time age calc, phone formatting, validation
-│   │   └── supabase/                # SSR client, server client, and middleware
-│   └── middleware.ts                # Route authentication guard
+│   │   ├── permissions.ts           # RBAC rules & 9 permission definitions
+│   │   ├── rate-limit.ts            # In-memory rate limiting utility
+│   │   ├── logger.ts                # Logging utility
+│   │   ├── error-utils.ts           # Error handling utilities
+│   │   └── utils.ts                 # Real-time age calc, phone formatting, validation
+│   ├── types/
+│   │   └── database.ts              # TypeScript type definitions
+│   └── middleware.ts                # Global middleware (CSRF, security headers, CSP)
 ```
 
 ---

@@ -1,4 +1,4 @@
-const CACHE_NAME = "alpalist-hoa-v3";
+﻿const CACHE_NAME = "alpalist-hoa-v3";
 const STATIC_CACHE = "alpalist-static-v3";
 const DYNAMIC_CACHE = "alpalist-dynamic-v3";
 const API_CACHE = "alpalist-api-v3";
@@ -45,14 +45,24 @@ async function networkFirst(request) {
 
 async function staleWhileRevalidate(request) {
   const cached = await caches.match(request);
-  const networkPromise = fetch(request, { redirect: 'follow' }).then((network) => {
+  if (cached) {
+    // Return cached version immediately, no network fetch needed
+    return cached;
+  }
+  
+  // No cached version, fetch from network
+  try {
+    const network = await fetch(request, { redirect: 'follow' });
     if (network.ok) {
-      const cache = caches.open(DYNAMIC_CACHE);
-      cache.then((c) => c.put(request, network.clone()));
+      const cache = await caches.open(DYNAMIC_CACHE);
+      // Clone before caching since we're returning the original
+      cache.put(request, network.clone());
     }
     return network;
-  }).catch(() => null);
-  return cached || networkPromise;
+  } catch {
+    // Network failed, return error
+    return new Response("Network error", { status: 503 });
+  }
 }
 
 self.addEventListener("install", (event) => {
