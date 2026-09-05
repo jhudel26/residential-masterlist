@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = "alpalist-hoa-v3";
+const CACHE_NAME = "alpalist-hoa-v3";
 const STATIC_CACHE = "alpalist-static-v3";
 const DYNAMIC_CACHE = "alpalist-dynamic-v3";
 const API_CACHE = "alpalist-api-v3";
@@ -20,7 +20,7 @@ const isLocalhost = Boolean(
 async function cacheFirst(request) {
   const cached = await caches.match(request);
   if (cached) return cached;
-  const network = await fetch(request);
+  const network = await fetch(request, { redirect: 'follow' });
   if (network.ok) {
     const cache = await caches.open(STATIC_CACHE);
     cache.put(request, network.clone());
@@ -30,7 +30,7 @@ async function cacheFirst(request) {
 
 async function networkFirst(request) {
   try {
-    const network = await fetch(request);
+    const network = await fetch(request, { redirect: 'follow' });
     if (network.ok) {
       const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(request, network.clone());
@@ -45,13 +45,13 @@ async function networkFirst(request) {
 
 async function staleWhileRevalidate(request) {
   const cached = await caches.match(request);
-  const networkPromise = fetch(request).then((network) => {
+  const networkPromise = fetch(request, { redirect: 'follow' }).then((network) => {
     if (network.ok) {
       const cache = caches.open(DYNAMIC_CACHE);
       cache.then((c) => c.put(request, network.clone()));
     }
     return network;
-  });
+  }).catch(() => null);
   return cached || networkPromise;
 }
 
