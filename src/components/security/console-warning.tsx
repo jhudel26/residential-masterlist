@@ -19,7 +19,7 @@ export function ConsoleWarning() {
       "color: orange; font-size: 16px;"
     );
     console.log(
-      "%cIf someone told you to copy-paste something here to enable a feature or &quot;hack&quot; an account, it&apos;s a scam and will give them access to your account.",
+      "%cIf someone told you to copy-paste something here to enable a feature or 'hack'; an account, it's a scam and will give them access to your account.",
       "color: red; font-size: 14px;"
     );
     console.log(
